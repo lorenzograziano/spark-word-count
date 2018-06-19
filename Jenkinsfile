@@ -12,7 +12,7 @@ pipeline {
         }
       }
       steps {
-        sh 'ls'//'sbt compile'
+        sh 'sbt compile'
       }
     }
 
@@ -34,12 +34,14 @@ pipeline {
 
     stage('SYSTEM TEST') {
       steps {
-        script {
-            sbt package
-            /home/lorenzo/apps/spark-2.2.0-bin-hadoop2.7/bin/spark-submit \
-                --class "org.spark.wordcount.WordCount" \
-                --master local[4] \
-                target/scala-2.11/spark-word-count_2.11-1.0.jar
+        node('master') {
+          script {
+              sbt package
+              /home/lorenzo/apps/spark-2.2.0-bin-hadoop2.7/bin/spark-submit \
+                  --class "org.spark.wordcount.WordCount" \
+                  --master local[4] \
+                  target/scala-2.11/spark-word-count_2.11-1.0.jar
+          }
         }
       }
     }

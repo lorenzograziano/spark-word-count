@@ -37,7 +37,7 @@ pipeline {
         node('master') {
           script {
               sh("pwd")
-              sh("ll ~")
+              sh("ls ~")
               sh("cd /home/lorenzo/IdeaProjects/spark-word-cnt/")
               sh("sbt package")
 
@@ -48,9 +48,21 @@ pipeline {
     }
 
     stage('GIT TAG') {
+      input {
+          message 'Check the result of the System Integration test, do you want to continue the pipeline execution??'
+          id 'Yes'
+          parameters {
+            string(name: 'CONTINUE', defaultValue: 'false')
+          }
+      }
       steps {
         node('master') {
            script{
+            if (env.CONTINUE == 'false') {
+               echo 'Exit from jenkins pipeline'
+               exit 1
+            } else {
+
               repositoryCommiterEmail = 'lorenzo.graziano@agilelab.it'
               repositoryCommiterUsername = 'lorenzo'
               repositoryCommiterPassword = 'password'
@@ -79,11 +91,12 @@ pipeline {
                   // pushes the tags
                   sh "git push --tags"
               }
-           }
-
+            }
+          }
         }
       }
     }
+
     stage('NEXUS DEPLOY') {
       agent {
             docker {
@@ -100,13 +113,9 @@ pipeline {
 
 
 /*
-    stage('DEPLOY') {
-      steps {
-        script {
+    stage('Deploy') {
 
 
-        }
-      }
     }
 
 

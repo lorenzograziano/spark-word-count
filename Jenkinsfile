@@ -3,42 +3,36 @@ pipeline {
   agent none
 
   stages {
-/*
+
     stage('build') {
-      agent {
-        docker {
-          image 'hseeberger/scala-sbt'
-          args '-v docker-sbt-home:/docker-java-home'
+        steps {
+            node('master') {
+              script {
+                  sh("cd /home/lorenzo/IdeaProjects/spark-word-cnt/")
+                  sh("sbt compile")
+                  }
+            }
         }
-      }
-      steps {
-        sh 'sbt compile'
-      }
     }
 
     stage('codeCoverage') {
-     agent {
-        docker {
-          image 'hseeberger/scala-sbt'
-          args '-v docker-sbt-home:/docker-java-home'
-        }
-     }
      steps {
-        script{
-          //launch coverage test
-          sh(script: 'sbt clean coverage test coverageReport', returnStatus: false)
-        }
-     }
-
+             node('master') {
+               script {
+                   sh("cd /home/lorenzo/IdeaProjects/spark-word-cnt/")
+                   sh(script: 'sbt clean coverage test coverageReport', returnStatus: false)
+                   }
+             }
+           }
     }
-*/
+
     stage('SYSTEM TEST') {
       steps {
         node('master') {
           script {
 
               sh("cd /home/lorenzo/IdeaProjects/spark-word-cnt/")
-              sh("sbt package")
+              sh("sbt clean package")
               sh('/home/lorenzo/apps/spark-2.2.0-bin-hadoop2.7/bin/spark-submit --class "org.spark.wordcount.WordCount" --master local[4] /home/lorenzo/IdeaProjects/spark-word-cnt/target/scala-2.11/spark-word-count_2.11-1.0.jar' )
           }
         }

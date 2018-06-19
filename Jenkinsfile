@@ -1,7 +1,7 @@
 pipeline {
 
   agent none
-
+/*
   stages {
 
     stage('build') {
@@ -31,16 +31,17 @@ pipeline {
      }
 
     }
-
+*/
     stage('SYSTEM TEST') {
       steps {
         node('master') {
           script {
-
+              sh("pwd")
+              sh("ll ~")
               sh("cd /home/lorenzo/IdeaProjects/spark-word-cnt/")
               sh("sbt package")
 
-              sh('/home/lorenzo/apps/spark-2.2.0-bin-hadoop2.7/bin/spark-submit --class "org.spark.wordcount.WordCount" --master local[4] /home/lorenzo/IdeaProjects/spark-word-cnt/target/scala-2.11/spark-word-count_2.11-1.0.jar')
+              sh('/home/lorenzo/apps/spark-2.2.0-bin-hadoop2.7/bin/spark-submit --class "org.spark.wordcount.WordCount" --master local[4] /home/lorenzo/IdeaProjects/spark-word-cnt/target/scala-2.11/spark-word-count_2.11-1.0.jar' )
           }
         }
       }

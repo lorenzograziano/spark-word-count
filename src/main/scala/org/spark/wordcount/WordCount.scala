@@ -22,7 +22,7 @@ object WordCount extends App {
   val sc = new SparkContext(conf)
 
   // Load the file
-  val lines = sc.textFile("src/main/resources/pagerank.txt")
+  val lines = sc.textFile("/home/lorenzo/Documenti/pagerank.txt")
 
   // Take the lines in the file and split the in individual words
   val words = WordCountFunctions.splitOnRegExp(lines, " ")

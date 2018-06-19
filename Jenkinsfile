@@ -56,7 +56,7 @@ pipeline {
 
               checkout scm
               sh "echo done"
-              if (env.BRANCH_NAME == 'jenk') {
+              if (env.BRANCH_NAME == 'master') {
                   stage 'tagging'
 
                   // GIT CONFIG

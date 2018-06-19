@@ -1,9 +1,9 @@
 pipeline {
 
   agent none
-/*
-  stages {
 
+  stages {
+/*
     stage('build') {
       agent {
         docker {

@@ -36,7 +36,9 @@ pipeline {
       steps {
         node('master') {
           script {
+
               sbt package
+
               /home/lorenzo/apps/spark-2.2.0-bin-hadoop2.7/bin/spark-submit \
                   --class "org.spark.wordcount.WordCount" \
                   --master local[4] \

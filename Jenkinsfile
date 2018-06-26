@@ -89,30 +89,16 @@ pipeline {
       }
     }
 
-    stage('NEXUS DEPLOY') {
-      agent {
-            docker {
-              image 'sonatype/nexus3'
-              args '-p 8081:8081 --name nexus'
-            }
-         }
-      steps {
-        script {
-           sh 'sbt publish'
-        }
-      }
-    }
-
-
-/*
     stage('Deploy') {
-
+        steps {
+                node('master') {
+                  script {
+                      sh("cp /home/lorenzo/IdeaProjects/spark-word-cnt/target/scala-2.11/spark-word-count_2.11-1.0.jar /home/lorenzo/Documenti")
+                      }
+                }
+              }
 
     }
-
-
-    */
-
 
   }
 }
